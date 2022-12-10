@@ -288,3 +288,48 @@ Jika dibuka webnya akan terlihat nama hostnya
 Hasilnya semua node dapat ping dengan sesama
 ss lagi
 
+## **Soal 1**
+---
+Agar topologi yang kalian buat dapat mengakses keluar, kalian diminta untuk mengkonfigurasi Strix menggunakan iptables, tetapi Loid tidak ingin menggunakan MASQUERADE.
+
+Untuk konfigurasi Strix menggunakan iptables, kami menggunakan perintah seperti berikut ini
+```
+IPETH0="$(ip -br a | grep eth0 | awk '{print $NF}' | cut -g'/' -f1)"
+iptables -t nat -A POSTROUTING -o eth0 -j SNAT --to-source "$IPETH0" -s 10.47.0/21
+```
+
+## **Soal 2**
+---
+Kalian diminta untuk melakukan drop semua TCP dan UDP dari luar Topologi kalian pada server yang merupakan DHCP Server demi menjaga keamanan.
+
+Untuk melakukan drop TCP dan UDP ke DHCP server, kami menggunakan perintah atau rules seperti berikut ini pada Strix
+```
+iptables -A FORWARD -d 10.47.7.243 -i eth0 -p tcp -j LOG --log-level 5
+iptables -A FORWARD -d 10.47.7.243 -i eth0 -p udp -j LOG --log-level 5
+
+iptables -A FORWARD -d 10.47.7.243 -i eth0 -p tcp -j DROP
+iptables -A FORWARD -d 10.47.7.243 -i eth0 -p udp -j DROP
+```
+
+## **Soal 3**
+---
+Loid meminta kalian untuk membatasi DHCP dan DNS Server hanya boleh menerima maksimal 2 koneksi ICMP secara bersamaan menggunakan iptables, selebihnya didrop
+
+Setting yang kami lakukan adalah sebagai berikut (Pada DNS Server Eden)
+```
+iptables -A INPUT -p icmp -m connlimit --connlimit-above 2 --connlimit-mask 0 -j LOG --log-level 5
+
+iptables -A INPUT -p icmp -m connlimit --connlimit-above 2 --connlimit-mask 0 -j DROP
+
+service rsyslog restart
+```
+
+Setting yang kami lakukan adalah sebagai berikut (Pada DHCP Server WISE)
+```
+iptables -A INPUT -p icmp -m connlimit --connlimit-above 2 --connlimit-mask 0 -j LOG --log-level 5
+
+iptables -A INPUT -p icmp -m connlimit --connlimit-above 2 --connlimit-mask 0 -j DROP
+
+service rsyslog restart
+```
+
