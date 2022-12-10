@@ -26,9 +26,31 @@ Jumlah Host pada Briar adalah 200 host
 
 (D) Tugas berikutnya adalah memberikan ip pada subnet Forger, Desmond, Blackbell, dan Briar secara dinamis menggunakan bantuan DHCP server. Kemudian kalian ingat bahwa kalian harus setting DHCP Relay pada router yang menghubungkannya.
 
+
+## Jawab
+
 Berikut ini adalah topologi yang telah kelompok kami buat:
 gambar topologi kita
 
 Untuk subnetting yang kami gunakan adalah VLSM dengan pembagian ip seperti berikut ini
 gambar VLSM kita
 
+Berikut ini adalah konfigurasi network pada setiap node
+[Strix]
+[Westalis]
+[Ostania]
+[Eden]
+[WISE]
+[Garden]
+[SSS]
+[Blackbell] [Briar] [Desmond] [Forger]
+Dibawah ini adalah setting Router agar semua rute dapat terhubung
+Pada Router Westalis dimasukkan kode berikut ini untuk rutenya dan DHCP Relaynya
+Pada Router Ostania dimasukkan kode berikut ini untuk rutenya dan DHCP Relaynya
+Untuk DHCP Server (WISE) di-setting
+Untuk DNS Server (Eden) di-setting
+Untuk Web-server (SSS dan Garden) di-setting seperti berikut ini
+
+Jika dibuka webnya akan terlihat nama hostnya
+
+Hasilnya semua node dapat ping dengan sesama
