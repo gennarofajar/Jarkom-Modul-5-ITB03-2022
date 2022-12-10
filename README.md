@@ -333,3 +333,64 @@ iptables -A INPUT -p icmp -m connlimit --connlimit-above 2 --connlimit-mask 0 -j
 service rsyslog restart
 ```
 
+Hasilnya
+ss hasil nomor 3
+
+## **Soal 4**
+---
+Akses menuju Web Server hanya diperbolehkan disaat jam kerja yaitu Senin sampai Jumat pada pukul 07.00 - 16.00.
+
+Kami setting iptables berikut ini pada Ostania sehingga akses selain senin sampai jumat dan diluar rentang jam tersebut akan di-reject
+```
+iptables -A FORWARD -d 10.47.7.243 -m time --weekdays Sat,Sun -j LOG --log-level 5
+iptables -A FORWARD -d 10.47.7.243 -m time --timestart 00:00 --timestop 06:59 --weekdays Mon,Tue,Wed,Thu,Fri -j LOG --log-level 5
+iptables -A FORWARD -d 10.47.7.243 -m time --timestart 16:01 --timestop 23:59 --weekdays Mon,Tue,Wed,Thu,Fri -j LOG --log-level 5
+
+iptables -A FORWARD -d 10.47.7.226 -m time --weekdays Sat,Sun -j LOG --log-level 5
+iptables -A FORWARD -d 10.47.7.226 -m time --timestart 00:00 --timestop 06:59 --weekdays Mon,Tue,Wed,Thu,Fri -j LOG --log-level 5
+iptables -A FORWARD -d 10.47.7.226 -m time --timestart 16:01 --timestop 23:59 --weekdays Mon,Tue,Wed,Thu,Fri -j LOG --log-level 5
+
+
+iptables -A FORWARD -d 10.47.7.243 -m time --weekdays Sat,Sun -j REJECT
+iptables -A FORWARD -d 10.47.7.243 -m time --timestart 00:00 --timestop 06:59 --weekdays Mon,Tue,Wed,Thu,Fri -j REJECT
+iptables -A FORWARD -d 10.47.7.243 -m time --timestart 16:01 --timestop 23:59 --weekdays Mon,Tue,Wed,Thu,Fri -j REJECT
+
+iptables -A FORWARD -d 10.47.7.226 -m time --weekdays Sat,Sun -j REJECT
+iptables -A FORWARD -d 10.47.7.226 -m time --timestart 00:00 --timestop 06:59 --weekdays Mon,Tue,Wed,Thu,Fri -j REJECT
+iptables -A FORWARD -d 10.47.7.226 -m time --timestart 16:01 --timestop 23:59 --weekdays Mon,Tue,Wed,Thu,Fri -j REJECT
+```
+
+Hasilnya jika diluar waktu yang di-setting
+ss hasil nomor 4
+
+Hasilnya jika dalam waktu yang di-setting
+ss hasil nomor 4
+
+## **Soal 5**
+---
+Karena kita memiliki 2 Web Server, Loid ingin Ostania diatur sehingga setiap request dari client yang mengakses Garden dengan port 80 akan didistribusikan secara bergantian pada SSS dan Garden secara berurutan dan request dari client yang mengakses SSS dengan port 443 akan didistribusikan secara bergantian pada Garden dan SSS secara berurutan.
+
+Berikut ini adalah setting yang kami lakukan pada Ostania sebagai router penghubung webserver
+```
+iptables -A PREROUTING -t nat -p tcp -d 10.47.7.226 --dport 80 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 10.47.7.226:80
+iptables -A PREROUTING -t nat -p tcp -d 10.47.7.226 --dport 80 -j DNAT --to-destination 10.47.7.227:80
+
+iptables -A PREROUTING -t nat -p tcp -d 10.47.7.227 --dport 443 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 10.47.7.227:443
+iptables -A PREROUTING -t nat -p tcp -d 10.47.7.227 --dport 443 -j DNAT --to-destination 10.47.7.226:443
+```
+
+Hasilnya jika melakukan dua kali lynx pada `10.47.7.242`
+ss hasil nomor 5
+
+## **Soal 6**
+---
+Karena Loid ingin tau paket apa saja yang di-drop, maka di setiap node server dan router ditambahkan logging paket yang di-drop dengan standard syslog level.
+
+Untuk melihat packet apa saja yang di-drop, kami menggunakan perintah LOG --log-level 5 pada akhir perintah saat akan di-drop
+
+Contohnya pada DHCP Server(WISE) dan DNS Server(Eden):
+```
+iptables -A INPUT -p icmp -m connlimit --connlimit-above 2 --connlimit-mask 0 -j LOG --log-level 5
+
+iptables -A INPUT -p icmp -m connlimit --connlimit-above 2 --connlimit-mask 0 -j DROP
+```
