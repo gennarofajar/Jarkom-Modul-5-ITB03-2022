@@ -9,7 +9,8 @@ Kelompok ITB03:
 ## Soal
 ---
 (A) Tugas pertama kalian yaitu membuat topologi jaringan sesuai dengan rancangan yang diberikan Loid dibawah ini
-gambar topologi di soal
+
+![](gambar/1.png)
 
 Keterangan :	
 Eden adalah DNS Server
@@ -30,10 +31,12 @@ Jumlah Host pada Briar adalah 200 host
 ## Jawab
 
 Berikut ini adalah topologi yang telah kelompok kami buat:
-gambar topologi kita
+
+![](gambar/2.png)
 
 Untuk subnetting yang kami gunakan adalah VLSM dengan pembagian ip seperti berikut ini
-gambar VLSM kita
+
+![](gambar/3.png)
 
 Berikut ini adalah konfigurasi network pada setiap node
 [Strix]
