@@ -41,9 +41,23 @@ Berikut ini adalah topologi yang telah kelompok kami buat:
 
 ![](gambar/2.png)
 
-Untuk subnetting yang kami gunakan adalah VLSM dengan pembagian ip seperti berikut ini
+Untuk subnetting yang kami gunakan adalah VLSM dengan pembagian IP seperti berikut ini
 
 ![](gambar/3.png)
+
+Berikut tabel perhitungan kelompok kami. <br>
+
+| Divisi   | Hosts   | Capacity Required | Subnet Mask     | Network Address  | 1st Address       | Last Address | Broadcast Address | Subnet Mask
+|---------------|---------------|----------------|--------------|-------|-------------------|------------------|-----------|--------------|
+| A1            | 3           | 8           | /29   | 10.46.7.224   | 10.46.7.225     | 10.46.7.230 | 10.46.7.231| 255.255.255.248|
+| A2            | 255           | 512  | /23 | 10.46.4.0   | 10.46.4.1     | 10.46.5.254 | 10.46.5.254| 255.255.254.0|
+| A3            | 200           | 256            | /24   | 10.46.6.0  | 10.46.6.0     | 10.46.6.254 | 10.46.6.255| 255.255.255.0|
+| A4            | 2            | 4            | /30    | 10.46.7.252   | 10.46.7.253   | 10.46.7.254  | 10.46.7.255 | 255.255.255.252|
+| A5            | 2            | 4            | /30    | 10.46.7.248   | 10.46.7.249   | 10.46.7.250  | 10.46.7.251 | 255.255.255.252|
+| A6            | 700            | 1024           | /22   | 10.46.0.0   | 10.46.0.1   | 10.46.3.254 | 10.46.3.255 | 255.255.252.0|
+| A7            | 62            | 64             | /26   | 10.46.7.128   | 10.46.7.129   | 10.46.7.190 | 10.46.7.191 | 255.255.255.192|
+| A8            | 3             | 8              | /29  | 10.46.7.240   | 10.46.7.241   | 10.46.7.246 | 10.46.7.247 | 255.255.255.248|
+| Host yang dibutuhkan    		| 1227 (/21) |               
 
 Berikut ini adalah konfigurasi network pada setiap node
 
@@ -283,11 +297,6 @@ service apache2 start
 echo "$HOSTNAME" > /var/www/html/index.html
 ```
 
-Jika dibuka webnya akan terlihat nama hostnya
-
-Hasilnya semua node dapat ping dengan sesama
-ss lagi
-
 ## **Soal 1**
 ---
 Agar topologi yang kalian buat dapat mengakses keluar, kalian diminta untuk mengkonfigurasi Strix menggunakan iptables, tetapi Loid tidak ingin menggunakan MASQUERADE.
@@ -333,8 +342,6 @@ iptables -A INPUT -p icmp -m connlimit --connlimit-above 2 --connlimit-mask 0 -j
 service rsyslog restart
 ```
 
-Hasilnya
-ss hasil nomor 3
 
 ## **Soal 4**
 ---
@@ -360,12 +367,6 @@ iptables -A FORWARD -d 10.46.7.226 -m time --timestart 00:00 --timestop 06:59 --
 iptables -A FORWARD -d 10.46.7.226 -m time --timestart 16:01 --timestop 23:59 --weekdays Mon,Tue,Wed,Thu,Fri -j REJECT
 ```
 
-Hasilnya jika diluar waktu yang di-setting
-ss hasil nomor 4
-
-Hasilnya jika dalam waktu yang di-setting
-ss hasil nomor 4
-
 ## **Soal 5**
 ---
 Karena kita memiliki 2 Web Server, Loid ingin Ostania diatur sehingga setiap request dari client yang mengakses Garden dengan port 80 akan didistribusikan secara bergantian pada SSS dan Garden secara berurutan dan request dari client yang mengakses SSS dengan port 443 akan didistribusikan secara bergantian pada Garden dan SSS secara berurutan.
@@ -379,9 +380,6 @@ iptables -A PREROUTING -t nat -p tcp -d 10.46.7.227 --dport 443 -m statistic --m
 iptables -A PREROUTING -t nat -p tcp -d 10.46.7.227 --dport 443 -j DNAT --to-destination 10.46.7.226:443
 ```
 
-Hasilnya jika melakukan dua kali lynx pada `10.46.7.242`
-ss hasil nomor 5
-
 ## **Soal 6**
 ---
 Karena Loid ingin tau paket apa saja yang di-drop, maka di setiap node server dan router ditambahkan logging paket yang di-drop dengan standard syslog level.
@@ -394,3 +392,6 @@ iptables -A INPUT -p icmp -m connlimit --connlimit-above 2 --connlimit-mask 0 -j
 
 iptables -A INPUT -p icmp -m connlimit --connlimit-above 2 --connlimit-mask 0 -j DROP
 ```
+## Kendala
+---
+Kurang teliti dalam melakukan routing
