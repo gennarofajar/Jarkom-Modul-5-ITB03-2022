@@ -1,4 +1,4 @@
-echo "nameserver 10.47.7.242" > /etc/resolv.conf
+echo "nameserver 10.46.7.242" > /etc/resolv.conf
 
 apt update
 apt install apache2 -y
