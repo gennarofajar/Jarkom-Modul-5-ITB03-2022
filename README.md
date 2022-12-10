@@ -13,12 +13,19 @@ Kelompok ITB03:
 ![](gambar/1.png)
 
 Keterangan:
+
 -Eden adalah DNS Server
+
 -WISE adalah DHCP Server
+
 -Garden dan SSS adalah Web Server
+
 -Jumlah Host pada Forger adalah 62 host
+
 -Jumlah Host pada Desmond adalah 700 host
+
 -Jumlah Host pada Blackbell adalah 255 host
+
 -Jumlah Host pada Briar adalah 200 host
 
 (B) Untuk menjaga perdamaian dunia, Loid ingin meminta kalian untuk membuat topologi tersebut menggunakan teknik CIDR atau VLSM setelah melakukan subnetting.
