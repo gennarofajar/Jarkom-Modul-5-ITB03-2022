@@ -12,7 +12,7 @@ Kelompok ITB03:
 
 ![](gambar/1.png)
 
-Keterangan :	
+Keterangan:
 -Eden adalah DNS Server
 -WISE adalah DHCP Server
 -Garden dan SSS adalah Web Server
